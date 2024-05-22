@@ -5,6 +5,7 @@ import iconSearch from '../../assets/search.svg'
 
 const Navigation = ({ onAction, onSearch }) => {
   const items = useSelector((state) => state.items)
+  const category = useSelector((state) => state.filterBy)
   const activeFilter = items.filter((el) => el.status === 'active')
   const dispatch = useDispatch()
 
@@ -31,7 +32,9 @@ const Navigation = ({ onAction, onSearch }) => {
         <li className="mr-2">
           <button
             onClick={() => handleChangeStatus('all')}
-            className="p-1 px-3 border-solid border-slate-400 border-[1px] hover:bg-slate-600 duration-400 transition-bg"
+            className={`p-1 px-3 border-solid border-slate-400 border-[1px] hover:bg-slate-600 duration-400 transition-bg ${
+              category === 'all' ? 'bg-slate-600' : undefined
+            }`}
           >
             All
           </button>
@@ -39,7 +42,8 @@ const Navigation = ({ onAction, onSearch }) => {
         <li className="mr-2">
           <button
             onClick={() => handleChangeStatus('active')}
-            className="p-1 px-3 border-solid border-slate-400 border-[1px]  hover:bg-slate-600 duration-400 transition-bg"
+            className={`p-1 px-3 border-solid border-slate-400 border-[1px]  hover:bg-slate-600 duration-400 transition-bg
+            ${category === 'active' ? 'bg-slate-600' : undefined}`}
           >
             Active
           </button>
@@ -47,7 +51,9 @@ const Navigation = ({ onAction, onSearch }) => {
         <li>
           <button
             onClick={() => handleChangeStatus('completed')}
-            className="p-1 px-3 border-solid border-slate-400 border-[1px]  hover:bg-slate-600 duration-400 transition-bg"
+            className={`p-1 px-3 border-solid border-slate-400 border-[1px]  hover:bg-slate-600 duration-400 transition-bg ${
+              category === 'completed' ? 'bg-slate-600' : undefined
+            }`}
           >
             Completed
           </button>

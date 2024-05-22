@@ -11,12 +11,18 @@ import List from './components/List/List'
 
 function App() {
   const { open, statusModal, handleOpen } = useModal()
+  const [inputSearch, setInputSearch] = useState('')
   const [search, setSearch] = useState(false)
   const filteredData = useSelector((state) => state.filteredData)
   const items = useSelector((state) => state.items)
   const category = useSelector((state) => state.filterBy)
+  const changed = useSelector((state) => state.changed)
   const handleSearch = () => {
     setSearch((prev) => !prev)
+  }
+
+  const handleSearchInput = (e) => {
+    setInputSearch(e.target.value)
   }
   const dispatch = useDispatch()
   const handleRemoveItem = (id) => {
@@ -32,15 +38,47 @@ function App() {
   }
 
   useEffect(() => {
-    dispatch(toDoSliceAction.filteredData(category))
-  }, [category, items, dispatch])
+    dispatch(toDoSliceAction.filteredData({ status: category, title: inputSearch }))
+  }, [category, items, inputSearch, dispatch])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let response = await fetch('https://todo-ae203-default-rtdb.firebaseio.com/items.json')
+      let data = await response.json()
+      dispatch(toDoSliceAction.replaceItems(data))
+    }
+    fetchData()
+  }, [dispatch])
+
+  useEffect(() => {
+    const sendData = async () => {
+      let response = await fetch('https://todo-ae203-default-rtdb.firebaseio.com/items.json', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(items),
+      })
+      return response.json()
+    }
+    if (changed) {
+      sendData()
+    }
+  }, [items, changed])
 
   return (
     <main>
       <Layout>
         <h1 className="text-3xl uppercase mt-8 font-bold">things to do</h1>
         <Navigation onAction={handleOpen} onSearch={handleSearch} />
-        {search && <Input className={`bg-slate-700 animate-showScale`} placeholder="Szukaj" />}
+        {search && (
+          <Input
+            className={`bg-slate-700 animate-showScale`}
+            placeholder="Szukaj"
+            onAction={handleSearchInput}
+            value={inputSearch}
+          />
+        )}
         {open && (
           <Modal open={open} onModalClose={handleOpen}>
             <div>
@@ -50,7 +88,7 @@ function App() {
           </Modal>
         )}
         <List
-          items={category === 'all' ? items : filteredData}
+          items={category === 'all' && inputSearch.length === 0 ? items : filteredData}
           onRemoveItem={handleRemoveItem}
           onChangeStatus={handleChangeStatus}
           onEditItem={handleEditItem}

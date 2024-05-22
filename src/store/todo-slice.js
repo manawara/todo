@@ -12,6 +12,7 @@ const toDoSlice = createSlice({
     },
     filterBy: 'all',
     filteredData: [],
+    changed: false,
   },
   reducers: {
     addItemToList(state, action) {
@@ -22,6 +23,12 @@ const toDoSlice = createSlice({
         status: 'active',
       })
       state.totalQuantity++
+      state.changed = true
+    },
+
+    replaceItems(state, action) {
+      const items = action.payload
+      state.items = items
     },
     removeItemWithList(state, action) {
       const id = action.payload
@@ -41,8 +48,14 @@ const toDoSlice = createSlice({
       state.filterBy = status
     },
     filteredData(state, action) {
-      const status = action.payload
-      state.filteredData = state.items.filter((el) => el.status === status)
+      const status = action.payload.status
+      const title = action.payload.title
+      state.changed = true
+      if (title.length > 0) {
+        state.filteredData = state.items.filter((el) => el.title.includes(title))
+      } else {
+        state.filteredData = state.items.filter((el) => el.status.includes(status))
+      }
     },
     updateItem(state, action) {
       const data = action.payload
