@@ -1,8 +1,26 @@
-# React + Vite
+# Todo List
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![alt text](https://github.com/manawara/todo/blob/main/public/todo.png "Logo Title Text 1")
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Table of contents
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Setup](#setup)
+
+## Description app
+The todo app is designed to help users organise and manage tasks and activities. It allows users to create, delete and edit task lists.
+	
+## Technologies
+Project is created with:
+* React Js
+* Tailwind
+* Redux
+	
+## Setup
+To run this project, install it locally using npm:
+
+```
+$ npm install
+$ npm run dev
+```
